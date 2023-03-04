@@ -9,7 +9,6 @@ from jinja2 import Environment
 from jinja2 import FileSystemLoader
 from seoanalyzer import analyze
 
-
 def main(args=None):
     if not args:
         module_path = os.path.dirname(inspect.getfile(analyze))
@@ -18,16 +17,17 @@ def main(args=None):
 
         arg_parser.add_argument('site', help='URL of the site you are wanting to analyze.')
         arg_parser.add_argument('-s', '--sitemap', help='URL of the sitemap to seed the crawler with.')
-        arg_parser.add_argument('-f', '--output-format', help='Output format.', choices=['json', 'html', ],
+        arg_parser.add_argument('-f', '--output-format', help='Output format.', choices=['json', 'html'],
                                 default='json')
+        arg_parser.add_argument('-o', '--output-file', default=None, type=str, help="File to save results to instead of sending to stdout.")
 
         arg_parser.add_argument('--analyze-headings', default=False, action='store_true', help='Analyze heading tags (h1-h6).')
         arg_parser.add_argument('--analyze-extra-tags', default=False, action='store_true', help='Analyze other extra additional tags.')
-        arg_parser.add_argument('--no-follow-links', default=True, action='store_false', help='Analyze all the existing inner links as well (might be time consuming).')
+        arg_parser.add_argument('--follow-links', default=False, action='store_true', help='Analyze all the existing inner links as well (might be time consuming).')
 
         args = arg_parser.parse_args()
 
-        output = analyze(args.site, args.sitemap, analyze_headings=args.analyze_headings, analyze_extra_tags=args.analyze_extra_tags, follow_links=args.no_follow_links)
+        output = analyze(args.site, args.sitemap, analyze_headings=args.analyze_headings, analyze_extra_tags=args.analyze_extra_tags, follow_links=args.follow_links)
 
         if args.output_format == 'html':
             env = Environment(loader=FileSystemLoader(os.path.join(module_path, 'templates')))
@@ -35,7 +35,11 @@ def main(args=None):
             output_from_parsed_template = template.render(result=output)
             print(output_from_parsed_template)
         elif args.output_format == 'json':
-            print(json.dumps(output, indent=4, separators=(',', ': ')))
+            if args.output_file:
+                with open(args.output_file, 'w', encoding='utf-8') as file:
+                    json.dump(output, file, ensure_ascii=False, indent=4)
+            else:
+                print(json.dumps(output, indent=4, separators=(',', ': ')))
     else:
         exit(1)
 
