@@ -1,0 +1,33 @@
+{% set git_user = "buck10" %}
+{% set git_name = "python-seo-analyzer" %}
+{% set version = "4.0.7.a" %}
+{% set name = "seoanalyzer" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  git_url: https://github.com/{{ git_user }}/{{ git_name }}.git
+  git_ver: {{ version }}
+
+requirements:
+  host:
+    - pip
+    - python
+    - beautifulsoup4
+    - lxml
+    - requests
+    - jinja2
+    - urllib3
+    - certifi
+  run:
+    - python
+
+test:
+  imports:
+    - {{ name }}
+
+about:
+  home: https://github.com/{{ git_user }}/{{ git_name }}
+  summary: SEO Analyzer
