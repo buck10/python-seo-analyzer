@@ -30,9 +30,6 @@ def main(args=None):
         output = analyze(args.site, args.sitemap, analyze_headings=args.analyze_headings, analyze_extra_tags=args.analyze_extra_tags, follow_links=args.no_follow_links)
 
         if args.output_format == 'html':
-            from jinja2 import Environment
-            from jinja2 import FileSystemLoader
-
             env = Environment(loader=FileSystemLoader(os.path.join(module_path, 'templates')))
             template = env.get_template('index.html')
             output_from_parsed_template = template.render(result=output)
