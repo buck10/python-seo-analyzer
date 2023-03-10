@@ -130,7 +130,7 @@ class Page():
             'title': self.title,
             'description': self.description,
             'word_count': self.total_word_count,
-            'keywords': self.sort_freq_dist(self.keywords, limit=5),
+            'keywords': self.sort_freq_dist(self.keywords),
             'bigrams': self.bigrams,
             'trigrams': self.trigrams,
             'warnings': self.warnings,
@@ -269,8 +269,8 @@ class Page():
         freq = [wordlist.count(w) for w in wordlist]
         return dict(zip(wordlist, freq))
 
-    def sort_freq_dist(self, freqdist, limit=1):
-        aux = [(freqdist[key], self.stem_to_word[key]) for key in freqdist if freqdist[key] >= limit]
+    def sort_freq_dist(self, freqdist):
+        aux = [(freqdist[key], self.stem_to_word[key]) for key in freqdist]
         aux.sort()
         aux.reverse()
         return aux
