@@ -4,7 +4,9 @@ import time
 from operator import itemgetter
 from seoanalyzer.website import Website
 
-def analyze(url, sitemap_url=None, analyze_headings=False, analyze_extra_tags=False, follow_links=True):
+def analyze(url, sitemap_url=None, analyze_headings=False,
+            analyze_extra_tags=False, follow_links=True, keyword_limit=1,
+            bigram_limit=1, trigram_limit=1):
     start_time = time.time()
 
     def calc_total_time():
@@ -28,21 +30,21 @@ def analyze(url, sitemap_url=None, analyze_headings=False, analyze_extra_tags=Fa
     output['keywords'] = []
 
     for w in sorted_words:
-        if w[1] > 4:
+        if w[1] > keyword_limit:
             output['keywords'].append({
                 'word': w[0],
                 'count': w[1],
             })
 
     for w, v in sorted_bigrams:
-        if v > 4:
+        if v > bigram_limit:
             output['keywords'].append({
                 'word': w,
                 'count': v,
             })
 
     for w, v in sorted_trigrams:
-        if v > 4:
+        if v > trigram_limit:
             output['keywords'].append({
                 'word': w,
                 'count': v,

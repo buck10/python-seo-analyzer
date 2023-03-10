@@ -20,6 +20,9 @@ def main(args=None):
         arg_parser.add_argument('-f', '--output-format', help='Output format.', choices=['json', 'html'],
                                 default='json')
         arg_parser.add_argument('-o', '--output-file', default=None, type=str, help="File to save results to instead of sending to stdout.")
+        arg_parser.add_argument('-k', '--keyword-limit', type=int, default=4, help='Set count limit for keywords to include in the output.')
+        arg_parser.add_argument('-b', '--bigram-limit', type=int, default=4, help='Set count limit for bigrams to include in the output.')
+        arg_parser.add_argument('-t', '--trigram-limit', type=int, default=4, help='Set count limit for trigrams to include in the output.')
 
         arg_parser.add_argument('--analyze-headings', default=False, action='store_true', help='Analyze heading tags (h1-h6).')
         arg_parser.add_argument('--analyze-extra-tags', default=False, action='store_true', help='Analyze other extra additional tags.')
@@ -27,7 +30,13 @@ def main(args=None):
 
         args = arg_parser.parse_args()
 
-        output = analyze(args.site, args.sitemap, analyze_headings=args.analyze_headings, analyze_extra_tags=args.analyze_extra_tags, follow_links=args.follow_links)
+        output = analyze(args.site, args.sitemap,
+                         analyze_headings=args.analyze_headings,
+                         analyze_extra_tags=args.analyze_extra_tags,
+                         follow_links=args.follow_links,
+                         keyword_limit=args.keyword_limit,
+                         bigram_limit=args.bigram_limit,
+                         trigram_limit=args.trigram_limit)
 
         if args.output_format == 'html':
             env = Environment(loader=FileSystemLoader(os.path.join(module_path, 'templates')))
