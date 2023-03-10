@@ -1,6 +1,6 @@
 {% set git_user = "buck10" %}
 {% set git_name = "python-seo-analyzer" %}
-{% set version = "4.0.7.a" %}
+{% set version = "4.0.7.b" %}
 {% set name = "seoanalyzer" %}
 
 package:
